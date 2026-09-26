@@ -509,5 +509,11 @@ app.use((err,req,res,next)=>{
  if(res.headersSent) return next(err);
  res.status(500).json({error:"SERVER_ERROR",message:"Flipcloud hit an unexpected server error. Try again; if it continues, check the server logs."});
 });
-const server=app.listen(PORT,()=>console.log(`Flipcloud listening on ${PORT}`));
-for(const signal of ["SIGTERM","SIGINT"])process.on(signal,()=>server.close(()=>process.exit(0)));
+export default app;
+
+// Local development starts a normal HTTP server. On Vercel, the app is
+// imported by /api/index.js and Vercel owns the server lifecycle.
+if (!process.env.VERCEL) {
+  const server=app.listen(PORT,()=>console.log(`Flipcloud listening on ${PORT}`));
+  for(const signal of ["SIGTERM","SIGINT"])process.on(signal,()=>server.close(()=>process.exit(0)));
+}

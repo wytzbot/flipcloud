@@ -13,6 +13,7 @@
     "firebase-admin": "^13.5.0"
   },
   "engines": {
-    "node": "24.x"
-  }
+    "node": "22.x"
+  },
+  "main": "server.js"
 }
