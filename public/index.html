@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000"><meta name="description" content="Flipcloud developer cloud setup and project diagnostics.">
+<title>Flipcloud — Developer Cloud Setup</title>
+<link rel="manifest" href="/manifest.json"><link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="header">
+  <a class="brand" href="/" aria-label="Flipcloud home"><span>F</span> Flipcloud</a>
+  <div class="header-search"><input id="search" autocomplete="off" placeholder="Search APIs, tools, auth, Firebase…"><div id="searchResults" class="search-results"></div></div>
+  <button class="pill icon" id="menuBtn" aria-label="Open menu">☰</button>
+</header>
+<aside id="drawer" class="drawer" aria-hidden="true">
+ <div class="drawer-head"><b>Flipcloud</b><button class="pill" id="closeMenu">Close</button></div>
+ <nav>
+  <a href="#dashboard">Dashboard</a><a href="#tools">Tools</a><a href="#apis">API catalog</a><a href="#github">GitHub</a><a href="#website">Website scanner</a><a href="#notifications">Notifications</a><a href="#billing">Billing</a><a href="#docs">Setup guide</a>
+ </nav>
+ <details><summary>Google Cloud</summary><a href="#apis">API setup</a><a href="#tools">Project scanner</a><a href="#tools">Code analyzer</a></details>
+ <details><summary>Developer integrations</summary><a href="#github">GitHub</a><a href="#notifications">FCM</a><a href="#apis">Third-party services</a></details>
+</aside>
+
+<main>
+<section id="dashboard" class="hero">
+ <div class="eyebrow">DEVELOPER CONTROL CENTER</div>
+ <h1>Cloud setup, without the console maze.</h1>
+ <p>Connect your own Google project, inspect requirements, enable supported APIs and keep development setup in one lightweight workspace.</p>
+ <div class="row"><a class="pill primary" href="/auth/google" id="connect">Connect Google</a><button class="pill" id="projectsBtn">Load projects</button><button class="pill" id="logoutBtn" hidden>Sign out</button></div>
+ <div id="notice" class="notice" role="status"></div>
+</section>
+
+<section class="grid" id="tools">
+ <article class="card">
+  <div class="cardtop"><div><small>PROJECT</small><h2>Project health</h2></div><span class="badge" id="projectCount">—</span></div>
+  <p>Select a project to inspect its enabled services.</p>
+  <select id="projectSelect"><option value="">Connect Google first</option></select>
+  <div class="row"><button class="pill primary" id="inspectBtn">Inspect</button><button class="pill" id="batchBtn">Enable recommended</button></div>
+  <div id="health" class="mini"></div>
+ </article>
+ <article class="card">
+  <div class="cardtop"><div><small>CODE</small><h2>Requirement scanner</h2></div><span class="badge">Free</span></div>
+  <p>Paste a dependency/config snippet and Flipcloud maps it to likely services. Analysis runs without paid AI.</p>
+  <textarea id="code" placeholder="Paste a small code/dependency snippet…"></textarea>
+  <button class="pill primary" id="scanBtn">Analyze requirements</button>
+  <div id="scan" class="mini"></div>
+ </article>
+</section>
+
+<section class="section" id="apis"><div class="sectionhead"><div><small>API CATALOG</small><h2>Services developers actually use</h2></div><button class="pill" id="catalogBtn">Refresh</button></div>
+ <div id="catalog" class="catalog"></div></section>
+
+<section class="section" id="website"><div class="sectionhead"><div><small>WEBSITE</small><h2>Connect a website without GitHub</h2></div></div>
+ <div class="card"><p>Enter a public website and Flipcloud will inspect what can be safely detected without installing anything. For deeper live diagnostics, add the SDK after the scan.</p><div class="row"><input id="websiteUrl" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url"><button class="pill primary" id="websiteScanBtn">Scan website</button></div><div id="websiteState" class="mini"></div><div id="websiteResults" class="mini"></div><details><summary>Add Flipcloud SDK</summary><p>After creating a project, add this lightweight snippet to your site:</p><pre>&lt;script src="https://cdn.flipcloud.dev/sdk.js" data-flipcloud-project="YOUR_PROJECT_ID" async&gt;&lt;/script&gt;</pre><p>The SDK is intended for diagnostics you explicitly enable; it should not collect passwords, payment data or private content.</p></details></div>
+</section>
+
+<section class="section" id="github"><div class="sectionhead"><div><small>GITHUB</small><h2>Connect your codebase</h2></div></div>
+ <div class="card inline"><div><h3>GitHub authentication</h3><p>Use Firebase Authentication's GitHub provider for account identity. Repository write access should be handled separately through a GitHub App with narrow permissions.</p></div><button class="pill primary" id="githubBtn" type="button">Connect GitHub</button></div>
+ <div id="githubState" class="mini"></div>
+</section>
+
+<section class="section" id="notifications"><div class="sectionhead"><div><small>ALERTS</small><h2>Useful notifications</h2></div></div>
+ <div class="card inline"><div><h3>Project alerts</h3><p>Receive browser alerts for supported setup events and completed Flipcloud actions.</p></div><button class="pill primary" id="notifyBtn">Enable alerts</button><button class="pill" id="notifyTestBtn" hidden>Send test alert</button></div>
+ <div id="notifyState" class="mini"></div>
+</section>
+
+
+<section class="section" id="billing"><div class="sectionhead"><div><small>BILLING</small><h2>Flipcloud Pro</h2></div><span class="badge">Recurring</span></div>
+<div class="billing-grid">
+ <article class="price-card"><small>MONTHLY</small><h3>$3.99 <span>/ month</span></h3><p>NGN price: ₦4,500/month</p><button class="pill primary planBtn" data-plan="monthly">Subscribe monthly</button></article>
+ <article class="price-card"><small>YEARLY</small><h3>$30 <span>/ year</span></h3><p>NGN price: ₦40,000/year</p><button class="pill primary planBtn" data-plan="yearly">Subscribe yearly</button></article>
+</div>
+<p class="fineprint">Recurring card billing is handled by Flutterwave. Your card details are not stored by Flipcloud. Cancellation and failed-renewal handling must be respected before continuing access.</p>
+<div id="billingState" class="mini">Checking subscription status…</div><div class="billing-note">Checkout uses the NGN price shown for Nigerian billing. The USD price is the international reference price.</div>
+<details><summary>Developer billing setup</summary><p>Set Flutterwave v4 Client ID/Secret on the backend. For the documented hosted subscription enrollment flow, also set the two Flutterwave Payment Plan IDs and secret/public credentials. After a payment method has been tokenized, v4 recurring charges use the customer and payment-method IDs.</p></details>
+</section>
+
+<section class="section" id="docs"><div class="sectionhead"><div><small>GUIDE</small><h2>What Flipcloud can do</h2></div></div>
+ <div class="accordion">
+  <details open><summary>Permissions</summary><p>Each operation explains the permission it needs. You can enable the permission or ignore the action. Ignoring it never blocks unrelated tools.</p></details>
+  <details><summary>Costs</summary><p>Flipcloud's diagnostics and catalog are local/rule-based. It does not proxy paid AI or cloud workloads for you. Enabling a Google service does not make the service free; any applicable usage charges remain on the user's project.</p></details>
+  <details><summary>Third-party APIs</summary><p>GitHub, npm metadata, jsDelivr/unpkg package delivery and other public developer services can be integrated without Flipcloud paying per request when used directly from the user's browser. Paid provider operations should remain in the user's account.</p></details>
+ </div>
+</section>
+</main>
+
+<div id="billingModal" class="modal" hidden><div class="modalbox"><button class="close" id="billingClose">×</button><h3>Start your Pro subscription</h3><p>Enter the email that should receive the Flutterwave billing record.</p><input id="billingEmail" type="email" autocomplete="email" placeholder="you@example.com"><input id="billingName" type="text" autocomplete="name" placeholder="Full name"><div class="row right"><button class="pill" id="billingCancel">Cancel</button><button class="pill primary" id="billingContinue">Continue to Flutterwave</button></div><div id="billingFormError" class="mini"></div></div></div>
+<div id="modal" class="modal" hidden><div class="modalbox"><button class="close" id="modalClose">×</button><h3 id="modalTitle"></h3><p id="modalText"></p><div class="row right"><button class="pill" id="modalIgnore">Ignore</button><button class="pill primary" id="modalEnable">Enable</button></div></div></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import {getAuth, GithubAuthProvider, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import {firebaseConfig} from "/firebase-config.js";
+const app=initializeApp(firebaseConfig), auth=getAuth(app);
+document.getElementById("githubBtn").onclick=async(e)=>{
+ e.preventDefault();
+ const state=document.getElementById("githubState");
+ try{
+  const provider=new GithubAuthProvider();provider.addScope("read:user");provider.addScope("user:email");
+  const r=await signInWithPopup(auth,provider);
+  const username=getAdditionalUserInfo(r)?.username||"";
+  if(!username){state.textContent=`GitHub identity connected as ${r.user.email||r.user.displayName||"GitHub user"}. To inspect repositories, Flipcloud will request separate repository permissions only when that feature is enabled.`;return}
+  try{
+   const idToken=await r.user.getIdToken();
+   const resp=await fetch("/api/github-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken,username})});
+   const d=await resp.json().catch(()=>({}));
+   state.textContent=resp.ok&&d.success
+    ?`GitHub identity connected as ${username}${d.complimentary?" — complimentary Flipcloud Pro is active on this account.":"."}`
+    :`Connected as ${username}, but Flipcloud could not link this session (${d.message||"verification failed"}).`;
+   if(resp.ok&&d.success) window.flipcloudRefreshBilling?.();
+  }catch{state.textContent=`Connected as ${username}, but Flipcloud could not reach the server to link this session.`}
+ }
+ catch(err){state.textContent=err.code==="auth/popup-closed-by-user"?"GitHub sign-in was cancelled.":(err.message||"GitHub sign-in failed.")}
+};
+</script>
+<script type="module" src="/app.js"></script>
+</body></html>
