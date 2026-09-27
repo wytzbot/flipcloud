@@ -20,7 +20,7 @@ Flipcloud is a lightweight developer cloud setup assistant.
 The catalog includes integrations developers commonly need: GitHub, npm/package metadata, jsDelivr/unpkg, Firebase, FCM, Cloudflare and common Google services. Public metadata can be fetched client-side where appropriate. Flipcloud should not proxy paid provider traffic.
 
 ## GitHub
-Firebase GitHub authentication signs users into Flipcloud. Repository operations are a separate concern and should use a GitHub App with minimum repository permissions. Configure the GitHub provider in Firebase Authentication and add the app credentials there.
+Firebase GitHub authentication signs users into Flipcloud (configured in the Firebase console, not via env vars here). Repository operations are a separate concern; if added later, use a Personal Access Token with the minimum required scopes rather than a GitHub App.
 
 ## Production requirements
 - Persist sessions/tokens securely server-side.
@@ -42,7 +42,7 @@ Flutterwave v4 is wired for server-side authentication and recurring tokenized c
 For the initial hosted subscription enrollment, Flutterwave's documented Payment Plan/Standard checkout currently uses the Standard API/payment-plan mechanism. This is kept server-side because the Flutterwave secret must never reach the browser. After enrollment/tokenization, v4 recurring charges can be used for recurring billing.
 
 Required production variables:
-`FLW_CLIENT_ID`, `FLW_CLIENT_SECRET`, `FLW_ENV`, `FLW_PUBLIC_KEY`, `FLW_SECRET_KEY`, `FLW_MONTHLY_PLAN_ID`, `FLW_YEARLY_PLAN_ID`, `FLW_REDIRECT_URL`.
+`FLW_CLIENT_ID`, `FLW_CLIENT_SECRET`, `FLW_ENV`, `FLW_SECRET_KEY`, `FLW_MONTHLY_PLAN_ID`, `FLW_YEARLY_PLAN_ID`, `FLW_REDIRECT_URL`, `FLW_SECRET_HASH`.
 
 Do not put any Flutterwave secret in frontend JavaScript or GitHub. Verify successful payments server-side and use Flutterwave webhooks before granting/renewing Pro access. Flutterwave recommends webhooks for subscription charges and payment status changes.
 

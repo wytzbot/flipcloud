@@ -326,8 +326,8 @@ app.post("/api/billing/hosted-subscription",async(req,res)=>{
       req.session.subscription=sub;
       return res.json({success:true,complimentary:true,message:"This account has complimentary Flipcloud Pro access. It has been activated — no payment required."});
     }
-    if(!process.env.FLW_PUBLIC_KEY||!process.env.FLW_SECRET_KEY||!process.env.FLW_MONTHLY_PLAN_ID||!process.env.FLW_YEARLY_PLAN_ID||!process.env.FLW_REDIRECT_URL)
-      return res.status(503).json({error:"CHECKOUT_NOT_CONFIGURED",message:"Flutterwave checkout needs public/secret credentials, both Payment Plan IDs and a production redirect URL."});
+    if(!process.env.FLW_SECRET_KEY||!process.env.FLW_MONTHLY_PLAN_ID||!process.env.FLW_YEARLY_PLAN_ID||!process.env.FLW_REDIRECT_URL)
+      return res.status(503).json({error:"CHECKOUT_NOT_CONFIGURED",message:"Flutterwave checkout needs a secret key, both Payment Plan IDs and a production redirect URL."});
     const planId=plan==="monthly"?process.env.FLW_MONTHLY_PLAN_ID:process.env.FLW_YEARLY_PLAN_ID;
     const tx=`flipcloud-${plan}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
     const r=await fetch("https://api.flutterwave.com/v3/payments",{method:"POST",headers:{"Authorization":`Bearer ${process.env.FLW_SECRET_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({
