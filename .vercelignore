@@ -1,0 +1,7 @@
+README.md
+SETUP.md
+MARKETPLACE.md
+marketplace/
+.env.example
+.git/
+.gitignore
