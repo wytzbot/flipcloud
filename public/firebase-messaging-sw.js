@@ -1,3 +1,0 @@
-importScripts("https://www.gstatic.com/firebasejs/12.3.0/firebase-app-compat.js","https://www.gstatic.com/firebasejs/12.3.0/firebase-messaging-compat.js","/firebase-config-sw.js");
-firebase.initializeApp(self.FLIPCLOUD_FIREBASE_CONFIG);
-firebase.messaging().onBackgroundMessage(p=>self.registration.showNotification(p.notification?.title||"Flipcloud",{body:p.notification?.body||"Flipcloud has an update.",data:p.data||{}}));
