@@ -48,3 +48,11 @@ Flutterwave production also requires:
 - `FLW_SECRET_HASH`
 
 Set the Flutterwave webhook URL to `/flw-webhook`. Keep `FLW_ALLOW_V3_WEBHOOK=false` unless you intentionally need the legacy verification path.
+
+## Free vs Pro
+
+Free: catalog, search, project inspect, Firebase starter preset, gcloud export, requirement scanner (15/day), website scan (3/day), single API enables (10/day), Cost Guard score and counts, deep-scan preview.
+Pro: unlimited use, all 9 presets, bulk apply across up to 10 projects, Cost Guard details with one-tap disable, Terraform/JSON/report exports, deep website scan.
+
+Logic lives in `pro.js`. Change quotas in `FREE_LIMITS`, presets in `PRESETS`. Trials (`trials`) and daily usage (`usage`) are stored in Firestore; without Firebase Admin variables they fall back to the session cookie and memory, which users can reset.
+A paid subscription counts as active for one billing period plus 3 days after its last successful payment webhook.

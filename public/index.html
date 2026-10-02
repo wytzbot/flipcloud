@@ -15,7 +15,7 @@
 <aside id="drawer" class="drawer" aria-hidden="true">
  <div class="drawer-head"><b>Flipcloud</b><button class="pill" id="closeMenu">Close</button></div>
  <nav>
-  <a href="#dashboard">Dashboard</a><a href="#tools">Tools</a><a href="#apis">API catalog</a><a href="#github">GitHub</a><a href="#website">Website scanner</a><a href="#notifications">Notifications</a><a href="#billing">Billing</a><a href="#docs">Setup guide</a>
+  <a href="#dashboard">Dashboard</a><a href="#tools">Tools</a><a href="#protools">Presets &amp; Cost Guard</a><a href="#apis">API catalog</a><a href="#github">GitHub</a><a href="#website">Website scanner</a><a href="#notifications">Notifications</a><a href="#billing">Billing</a><a href="#docs">Setup guide</a>
  </nav>
  <details><summary>Google Cloud</summary><a href="#apis">API setup</a><a href="#tools">Project scanner</a><a href="#tools">Code analyzer</a></details>
  <details><summary>Developer integrations</summary><a href="#github">GitHub</a><a href="#notifications">FCM</a><a href="#apis">Third-party services</a></details>
@@ -27,7 +27,7 @@
  <h1>Cloud setup, without the console maze.</h1>
  <p>Connect your own Google project, inspect requirements, enable supported APIs and keep development setup in one lightweight workspace.</p>
  <div class="row"><a class="pill primary" href="/auth/google" id="connect">Connect Google</a><button class="pill" id="projectsBtn">Load projects</button><button class="pill" id="logoutBtn" hidden>Sign out</button></div>
- <div id="notice" class="notice" role="status"></div>
+ <div id="planBadge" class="planbadge" hidden></div><div id="notice" class="notice" role="status"></div>
 </section>
 
 <section class="grid" id="tools">
@@ -47,11 +47,24 @@
  </article>
 </section>
 
+<section class="section" id="protools"><div class="sectionhead"><div><small>POWER TOOLS</small><h2>Presets, Cost Guard &amp; exports</h2></div><span class="badge" id="proToolsBadge">Free + Pro</span></div>
+ <div class="protools">
+  <article class="subcard"><h3>Stack presets</h3><p>Enable a whole stack in one tap. Firebase starter is free; the rest are Pro.</p>
+   <div id="presetList" class="presets"></div>
+   <label class="check"><input type="checkbox" id="presetAll"> Apply to all my projects (max 10) <span class="lock">Pro</span></label>
+   <div class="row"><button class="pill primary" id="presetApply">Apply preset</button></div><div id="presetState" class="mini"></div></article>
+  <article class="subcard"><h3>Cost Guard</h3><p>Audit the selected project for services that can run up a bill or widen your attack surface.</p>
+   <div class="row"><button class="pill primary" id="auditBtn">Run audit</button></div><div id="auditResults" class="mini"></div></article>
+  <article class="subcard"><h3>Export setup</h3><p>Take your project's API setup with you. Shell script is free; the rest are Pro.</p>
+   <div class="row"><button class="pill exportBtn" data-format="gcloud">gcloud script</button><button class="pill exportBtn" data-format="terraform">Terraform <span class="lock">Pro</span></button><button class="pill exportBtn" data-format="json">JSON <span class="lock">Pro</span></button><button class="pill exportBtn" data-format="markdown">Report <span class="lock">Pro</span></button></div><div id="exportState" class="mini"></div></article>
+ </div>
+</section>
+
 <section class="section" id="apis"><div class="sectionhead"><div><small>API CATALOG</small><h2>Services developers actually use</h2></div><button class="pill" id="catalogBtn">Refresh</button></div>
  <div id="catalog" class="catalog"></div></section>
 
 <section class="section" id="website"><div class="sectionhead"><div><small>WEBSITE</small><h2>Connect a website without GitHub</h2></div></div>
- <div class="card"><p>Enter a public website and Flipcloud will inspect what can be safely detected without installing anything. For deeper live diagnostics, add the SDK after the scan.</p><div class="row"><input id="websiteUrl" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url"><button class="pill primary" id="websiteScanBtn">Scan website</button></div><div id="websiteState" class="mini"></div><div id="websiteResults" class="mini"></div><details><summary>Add Flipcloud SDK</summary><p>After creating a project, add this lightweight snippet to your site:</p><pre>&lt;script src="https://cdn.flipcloud.dev/sdk.js" data-flipcloud-project="YOUR_PROJECT_ID" async&gt;&lt;/script&gt;</pre><p>The SDK is intended for diagnostics you explicitly enable; it should not collect passwords, payment data or private content.</p></details></div>
+ <div class="card"><p>Enter a public website and Flipcloud will inspect what can be safely detected without installing anything. For deeper live diagnostics, add the SDK after the scan.</p><div class="row"><input id="websiteUrl" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url"><button class="pill primary" id="websiteScanBtn">Scan website</button></div><div id="websiteState" class="mini"></div><div id="websiteResults" class="mini"></div><div id="websiteDeep" class="mini"></div><details><summary>Add Flipcloud SDK</summary><p>After creating a project, add this lightweight snippet to your site:</p><pre>&lt;script src="https://cdn.flipcloud.dev/sdk.js" data-flipcloud-project="YOUR_PROJECT_ID" async&gt;&lt;/script&gt;</pre><p>The SDK is intended for diagnostics you explicitly enable; it should not collect passwords, payment data or private content.</p></details></div>
 </section>
 
 <section class="section" id="github"><div class="sectionhead"><div><small>GITHUB</small><h2>Connect your codebase</h2></div></div>
@@ -71,6 +84,19 @@
  <article class="price-card"><small>YEARLY</small><h3>$30 <span>/ year</span></h3><p>NGN price: ₦40,000/year</p><button class="pill primary planBtn" data-plan="yearly">Subscribe yearly</button></article>
 </div>
 <p class="fineprint">Recurring card billing is handled by Flutterwave. Your card details are not stored by Flipcloud. Cancellation and failed-renewal handling must be respected before continuing access.</p>
+
+<div id="trialRow" class="trialrow" hidden><div><b>Try Pro free for 7 days</b><div class="mini">No card needed. Everything unlocks instantly.</div></div><button class="pill primary" id="trialBtn">Start free trial</button></div>
+<div class="compare"><div class="ch"><span></span><b>Free</b><b>Pro</b></div>
+<div><span>Catalog, search, project inspect</span><i>✓</i><i>✓</i></div>
+<div><span>Firebase starter setup</span><i>✓</i><i>✓</i></div>
+<div><span>Website scans / day</span><i>3</i><i>Unlimited</i></div>
+<div><span>Code analyses / day</span><i>15</i><i>Unlimited</i></div>
+<div><span>Single API enables / day</span><i>10</i><i>Unlimited</i></div>
+<div><span>All 9 stack presets</span><i>1</i><i>✓</i></div>
+<div><span>Bulk enable across projects</span><i>—</i><i>✓</i></div>
+<div><span>Cost Guard details + one-tap disable</span><i>Score</i><i>✓</i></div>
+<div><span>Terraform, JSON, report exports</span><i>—</i><i>✓</i></div>
+<div><span>Deep website scan (security + stack)</span><i>Preview</i><i>✓</i></div></div>
 <div id="billingState" class="mini">Checking subscription status…</div><div class="billing-note">Checkout uses the NGN price shown for Nigerian billing. The USD price is the international reference price.</div>
 <details><summary>Developer billing setup</summary><p>Set Flutterwave v4 Client ID/Secret on the backend. For the documented hosted subscription enrollment flow, also set the two Flutterwave Payment Plan IDs and secret/public credentials. After a payment method has been tokenized, v4 recurring charges use the customer and payment-method IDs.</p></details>
 </section>
@@ -85,6 +111,7 @@
 </main>
 
 <div id="billingModal" class="modal" hidden><div class="modalbox"><button class="close" id="billingClose">×</button><h3>Start your Pro subscription</h3><p>Enter the email that should receive the Flutterwave billing record.</p><input id="billingEmail" type="email" autocomplete="email" placeholder="you@example.com"><input id="billingName" type="text" autocomplete="name" placeholder="Full name"><div class="row right"><button class="pill" id="billingCancel">Cancel</button><button class="pill primary" id="billingContinue">Continue to Flutterwave</button></div><div id="billingFormError" class="mini"></div></div></div>
+<div id="upgradeModal" class="modal" hidden><div class="modalbox"><button class="close" id="upgradeClose">×</button><small>PRO</small><h3 id="upgradeTitle">Unlock with Pro</h3><p id="upgradeText"></p><div class="row right"><button class="pill" id="upgradeLater">Not now</button><button class="pill" id="upgradePlans">See plans</button><button class="pill primary" id="upgradeTrial" hidden>Start 7-day free trial</button></div></div></div>
 <div id="modal" class="modal" hidden><div class="modalbox"><button class="close" id="modalClose">×</button><h3 id="modalTitle"></h3><p id="modalText"></p><div class="row right"><button class="pill" id="modalIgnore">Ignore</button><button class="pill primary" id="modalEnable">Enable</button></div></div></div>
 
 <script type="module">

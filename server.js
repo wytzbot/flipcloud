@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import crypto from "crypto";
 import dns from "dns/promises";
 import net from "net";
+import { registerPro, deepScan, securityPreview } from "./pro.js";
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
 const app=express(), PORT=process.env.PORT||3000;
@@ -45,6 +46,8 @@ if(firebaseAdminReady()){
 }
 async function saveDoc(collection,id,data){if(!firestore)return false;await firestore.collection(collection).doc(id).set(data,{merge:true});return true}
 async function getDoc(collection,id){if(!firestore)return null;const snap=await firestore.collection(collection).doc(id).get();return snap.exists?snap.data():null}
+
+const pro=registerPro(app,{google,requireGoogle,getDb:()=>firestore,sessionIsComplimentary,getCatalog:()=>API_CATALOG});
 
 // Complimentary Flipcloud Pro access: this exact email and this exact GitHub
 // username never pay. Checked before any Flutterwave call is made.
@@ -366,17 +369,6 @@ app.get("/billing-callback",async(req,res)=>{
  res.send(`<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flipcloud Billing</title><style>body{font:16px system-ui;display:grid;place-items:center;min-height:100vh;background:#fafafa}.box{max-width:520px;padding:28px;background:#fff;border:1px solid #ddd;border-radius:20px}a{color:#000}</style><div class="box"><h1>${verified?"Pro activated":"Payment processing"}</h1><p>${reason} ${txId?`Reference: ${txId}`:""}</p><a href="/">Return to Flipcloud</a></div>`);
 });
 
-app.get("/api/billing/status",async(req,res)=>{
- const email=String(req.session.user?.email||req.session.github?.email||req.session.subscription?.email||"").toLowerCase();
- if(sessionIsComplimentary(req))
-  return res.json({active:true,plan:"complimentary",renewal:null,email:email||null,complimentary:true});
- if(!email)return res.json({active:false,source:"not-signed-in"});
- const sub=await getDoc("subscriptions",email).catch(()=>null);
- const local=req.session.subscription; const current=sub||local;
- const active=Boolean(current&&current.status==="active");
- res.json({active,plan:active?current.plan:null,renewal:active?current.updatedAt:null,email});
-});
-
 app.get("/api/billing/verify/:transactionId",async(req,res)=>{
  try{
   if(!process.env.FLW_SECRET_KEY)return res.status(503).json({error:"BILLING_NOT_CONFIGURED",message:"Flutterwave secret key is not configured."});
@@ -448,7 +440,9 @@ app.post("/api/website-scan",async(req,res)=>{
   for(const [name,ok] of checks){if(name==="robots.txt")robots=ok;if(name==="sitemap.xml")sitemap=ok}
   const result={url:current.href,status:r.status,contentType:ct,https:current.protocol==="https:",checks:{title:has(/<title\b[^>]*>\s*[^<]+<\/title>/),description:has(/<meta[^>]+name=["']description["']/),viewport:has(/<meta[^>]+name=["']viewport["']/),canonical:has(/<link[^>]+rel=["']canonical["']/),openGraph:has(/<meta[^>]+property=["']og:/),sitemap:sitemap||links.some(x=>/sitemap\.xml/i.test(x)),robots:robots||links.some(x=>/robots\.txt/i.test(x)),manifest:has(/<link[^>]+rel=["']manifest["']/),firebase:has(/firebase/i),googleSignIn:has(/google.{0,30}(signin|accounts|identity)/),fcm:has(/firebase.{0,30}(messaging|fcm)/),analytics:has(/gtag|googletagmanager|google-analytics/i),maps:has(/maps\.googleapis|google maps/i)},scripts};
   await sendSessionNotification(req,"Website scan complete",`${current.hostname} has finished scanning.`);
-  res.json({success:true,result});
+  const ent=await pro.getEntitlement(req);
+  const extra=ent.pro?{deep:deepScan(r.headers,text)}:{deepLocked:true,deepPreview:securityPreview(r.headers)};
+  res.json({success:true,result,...extra});
  }catch(e){res.status(502).json({error:e.code==="PRIVATE_HOST"?"BLOCKED_HOST":"SCAN_FAILED",message:e.code==="PRIVATE_HOST"?"Local or private network addresses cannot be scanned.":e.code==="BAD_REDIRECT"?"The website redirected to an unsupported protocol.":e.name==="AbortError"?"The website took too long to respond.":"Flipcloud could not fetch that website. Make sure it is publicly reachable over HTTPS."})}
 });
 
