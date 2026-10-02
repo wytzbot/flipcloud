@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node lib/server.js"
   },
   "dependencies": {
     "express": "^5.1.0",
@@ -15,5 +15,5 @@
   "engines": {
     "node": "22.x"
   },
-  "main": "server.js"
+  "main": "lib/server.js"
 }

@@ -1,10 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
-  "framework": null,
-  "buildCommand": null,
-  "installCommand": "npm install",
-  "outputDirectory": "public",
   "functions": {
     "api/index.js": {
       "maxDuration": 60,
@@ -12,13 +7,37 @@
     }
   },
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/index.js" },
-    { "source": "/auth/:path*", "destination": "/api/index.js" },
-    { "source": "/flw-webhook", "destination": "/api/index.js" },
-    { "source": "/billing-callback", "destination": "/api/index.js" },
-    { "source": "/privacy", "destination": "/api/index.js" },
-    { "source": "/terms", "destination": "/api/index.js" },
-    { "source": "/support", "destination": "/api/index.js" },
-    { "source": "/setup", "destination": "/api/index.js" }
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/auth/:path*",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/flw-webhook",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/billing-callback",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/support",
+      "destination": "/support.html"
+    },
+    {
+      "source": "/setup",
+      "destination": "/setup.html"
+    }
   ]
 }
